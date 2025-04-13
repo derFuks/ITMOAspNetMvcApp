@@ -1,0 +1,35 @@
+@model IEnumerable<ITMOAspNetMvcApp.Models.Lesson>
+
+@{
+    ViewData["Title"] = "Список занятий";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Создать занятие</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Дата занятия</th>
+            <th>Дисциплина</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var lesson in Model)
+    {
+        <tr>
+            <td>@lesson.LessonDate.ToShortDateString()</td>
+            <td>@(lesson.Discipline != null ? lesson.Discipline.Name : "Не указано")</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@lesson.LessonId" class="btn btn-primary btn-sm">Редактировать</a>
+                <a asp-action="Details" asp-route-id="@lesson.LessonId" class="btn btn-info btn-sm">Детали</a>
+                <a asp-action="Delete" asp-route-id="@lesson.LessonId" class="btn btn-danger btn-sm">Удалить</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

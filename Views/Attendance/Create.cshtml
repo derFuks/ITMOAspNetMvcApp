@@ -1,0 +1,31 @@
+@model ITMOAspNetMvcApp.Models.Attendance
+
+@{
+    ViewData["Title"] = "Добавить запись посещаемости";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="StudentId"></label>
+        <input asp-for="StudentId" class="form-control" />
+        <span asp-validation-for="StudentId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LessonId"></label>
+        <input asp-for="LessonId" class="form-control" />
+        <span asp-validation-for="LessonId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="WasPresent"></label>
+        <input asp-for="WasPresent" class="form-check-input" type="checkbox" />
+        <span asp-validation-for="WasPresent" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

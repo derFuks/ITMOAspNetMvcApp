@@ -1,0 +1,21 @@
+@model ITMOAspNetMvcApp.Models.Lesson
+
+@{
+    ViewData["Title"] = "Детали занятия";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Дата занятия</dt>
+        <dd class="col-sm-10">@Model.LessonDate.ToLongDateString()</dd>
+        <dt class="col-sm-2">Дисциплина</dt>
+        <dd class="col-sm-10">@(Model.Discipline != null ? Model.Discipline.Name : "Не указано")</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.LessonId" class="btn btn-primary">Редактировать</a>
+    <a asp-action="Index" class="btn btn-secondary">Вернуться к списку</a>
+</div>

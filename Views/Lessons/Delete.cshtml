@@ -1,0 +1,24 @@
+@model ITMOAspNetMvcApp.Models.Lesson
+
+@{
+    ViewData["Title"] = "Удалить занятие";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Вы уверены, что хотите удалить это занятие?</h3>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Дата занятия</dt>
+        <dd class="col-sm-10">@Model.LessonDate.ToLongDateString()</dd>
+        <dt class="col-sm-2">Дисциплина</dt>
+        <dd class="col-sm-10">@(Model.Discipline != null ? Model.Discipline.Name : "Не указано")</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="LessonId" />
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>

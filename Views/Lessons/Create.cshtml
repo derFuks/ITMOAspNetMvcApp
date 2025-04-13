@@ -1,0 +1,27 @@
+@model ITMOAspNetMvcApp.Models.Lesson
+
+@{
+    ViewData["Title"] = "Создать занятие";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="LessonDate"></label>
+        <input asp-for="LessonDate" class="form-control" type="date" />
+        <span asp-validation-for="LessonDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DisciplineId"></label>
+        <input asp-for="DisciplineId" class="form-control" />
+        <!-- При желании, можно заменить на выпадающий список с дисциплинами -->
+        <span asp-validation-for="DisciplineId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать</button>
+    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,25 @@
+@model ITMOAspNetMvcApp.Models.Student
+
+@{
+    ViewData["Title"] = "Детали студента";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Фамилия</dt>
+        <dd class="col-sm-10">@Model.LastName</dd>
+        <dt class="col-sm-2">Имя</dt>
+        <dd class="col-sm-10">@Model.FirstName</dd>
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+        <dt class="col-sm-2">Баллы посещаемости</dt>
+        <dd class="col-sm-10">@Model.TotalAttendanceScore</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.StudentId" class="btn btn-primary">Редактировать</a>
+    <a asp-action="Index" class="btn btn-secondary">Вернуться к списку</a>
+</div>

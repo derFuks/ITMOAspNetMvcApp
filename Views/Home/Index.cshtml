@@ -1,8 +1,80 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Экзаминационная работа ASP.Net MVC App";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Привет!</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-left">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>Добро пожаловать в web-приложение учёта студентов и табель посещения занятий.<br>Ниже приведён список доступных для изменения разделов:</p>
+</div>
+<div>
+    <ul class="list-group"></ul>
+    <li class="list-group-item">
+        <a asp-controller="Students" asp-action="Index">Студенты</a>
+    </li>
+    <li class="list-group-item">
+        <a asp-controller="Teachers" asp-action="Index">Преподаватели</a>
+    </li>
+    <li class="list-group-item">
+        <a asp-controller="Attendance" asp-action="Index">Посещаемость</a>
+    </li>
+    <li class="list-group-item">
+        <a asp-controller="Lessons" asp-action="Index">Занятия</a>
+    </li>
+    <li class="list-group-item">
+        <a asp-controller="Disciplines" asp-action="Index">Дисциплины</a>
+    </li>
+</ul>
+</div>
+
+@model IEnumerable<ITMOAspNetMvcApp.Models.AttendanceRecord>
+@{
+    ViewData["Title"] = "Табель посещения";
+}
+
+<h3 class="mt-4">@ViewData["Title"]</h3>
+
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID студента</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Всего занятий</th>
+                <th>Оценка по экзамену</th>
+                <th>17.03.2025</th>
+                <th>18.03.2025</th>
+                <th>20.03.2025</th>
+                <th>24.03.2025</th>
+                <th>25.03.2025</th>
+                <th>28.03.2025</th>
+                <th>31.03.2025</th>
+                <th>01.04.2025</th>
+                <th>03.04.2025</th>
+                <th>07.04.2025</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr>
+                    <td>@record.student_id</td>
+                    <td>@record.first_name</td>
+                    <td>@record.last_name</td>
+                    <td>@record.TotalAttendanceScore</td>
+                    <td>@record.ExamScore</td>
+                    <td>@record.D17032025</td>
+                    <td>@record.D18032025</td>
+                    <td>@record.D20032025</td>
+                    <td>@record.D24032025</td>
+                    <td>@record.D25032025</td>
+                    <td>@record.D28032025</td>
+                    <td>@record.D31032025</td>
+                    <td>@record.D01042025</td>
+                    <td>@record.D03042025</td>
+                    <td>@record.D07042025</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
