@@ -4,6 +4,9 @@ using ITMOAspNetMvcApp.Data;
 using ITMOAspNetMvcApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using ClosedXML.Excel;
+using Microsoft.AspNetCore.Http;
 
 namespace ITMOAspNetMvcApp.Controllers
 {
@@ -165,5 +168,53 @@ namespace ITMOAspNetMvcApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: Students/ExportToCsv
+        public async Task<IActionResult> ExportToCsv()
+        {
+            var students = await _context.Students.ToListAsync();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("student_id,first_name,last_name,total_attendance_score,exam_score");
+
+            foreach (var s in students)
+            {
+                sb.AppendLine($"{s.StudentId},{s.FirstName},{s.LastName},{s.TotalAttendanceScore},{s.ExamScore}");
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            return File(bytes, "text/csv", "students_export.csv");
+        }
+
+        // GET: Students/ExportToXls
+        public async Task<IActionResult> ExportToXls()
+        {
+            var students = await _context.Students.ToListAsync();
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Students");
+            worksheet.Cell(1, 1).Value = "student_id";
+            worksheet.Cell(1, 2).Value = "first_name";
+            worksheet.Cell(1, 3).Value = "last_name";
+            worksheet.Cell(1, 4).Value = "total_attendance_score";
+            worksheet.Cell(1, 5).Value = "exam_score";
+
+            for (int i = 0; i < students.Count; i++)
+            {
+                var s = students[i];
+                worksheet.Cell(i + 2, 1).Value = s.StudentId;
+                worksheet.Cell(i + 2, 2).Value = s.FirstName;
+                worksheet.Cell(i + 2, 3).Value = s.LastName;
+                worksheet.Cell(i + 2, 4).Value = s.TotalAttendanceScore;
+                worksheet.Cell(i + 2, 5).Value = s.ExamScore;
+            }
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "students_export.xlsx");
+        }
+
     }
 }

@@ -29,3 +29,39 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.border-light {
+  --bs-border-opacity: 0;
+  background-color: #ecf1f1;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.tableFixHead {
+  overflow-x: auto;
+  position: relative;
+}
+
+.tableFixHead table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.tableFixHead th,
+.tableFixHead td {
+  min-width: 150px;
+  white-space: nowrap;
+}
+
+.tableFixHead th:first-child,
+.tableFixHead td:first-child,
+.tableFixHead th:nth-child(2),
+.tableFixHead td:nth-child(2) {
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 2;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}

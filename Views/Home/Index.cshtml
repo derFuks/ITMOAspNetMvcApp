@@ -1,37 +1,133 @@
-﻿@{
+﻿@model IEnumerable<ITMOAspNetMvcApp.Models.AttendanceRecord>
+@{
     ViewData["Title"] = "ASP.Net MVC App";
+    var students = ViewBag.Students as List<ITMOAspNetMvcApp.Models.Student>;
+    var selectedStudent = ViewBag.SelectedStudent as ITMOAspNetMvcApp.Models.Student;
 }
 
 <div class="text-left">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <h2>Экзаминационная работа</h2>
-    <p>Добро пожаловать в web-приложение учёта студентов и табель посещения занятий.<br>Ниже приведён список доступных для изменения разделов:</p>
+    <p>Добро пожаловать в web-приложение учёта студентов и табель посещения занятий.<br><br></p>
 </div>
-<div>
-    <ul class="list-group"></ul>
-    <li class="list-group-item">
-        <a asp-controller="Students" asp-action="Index">Студенты</a>
-    </li>
-    <li class="list-group-item">
-        <a asp-controller="Teachers" asp-action="Index">Преподаватели</a>
-    </li>
-    <li class="list-group-item">
-        <a asp-controller="Attendance" asp-action="Index">Посещаемость</a>
-    </li>
-    <li class="list-group-item">
-        <a asp-controller="Lessons" asp-action="Index">Занятия</a>
-    </li>
-</ul>
-</div>
-
-@model IEnumerable<ITMOAspNetMvcApp.Models.AttendanceRecord>
-@{
-    ViewData["Title"] = "Табель посещения";
-}
-
-<h3 class="mt-4">@ViewData["Title"]</h3>
 
 <div class="container">
+    <div class="row">
+        <h3>Ректировать данные</h3>
+        <p>Ниже приведён список доступных для изменения разделов:</p>
+        <div class="col-sm, border-light">
+                <a asp-controller="Students" asp-action="Index">Студенты</a>
+        </div>
+        <div class="col-sm, border-light">
+                <a asp-controller="Teachers" asp-action="Index">Преподаватели</a>
+        </div>
+        <div class="col-sm, border-light">
+                <a asp-controller="Attendance" asp-action="Index">Посещаемость</a>
+        </div>
+        <div class="col-sm, border-light">
+                <a asp-controller="Lessons" asp-action="Index">Занятия</a>
+        </div>
+    </div>
+</div>
+
+<hr style="margin: 3rem 0;"/>
+<div>
+    <h3>Посчитать сумму посещения</h3>
+        <p>Выберите студента:</p>
+        
+        @if (students != null && students.Any())
+        {
+            <form method="get" asp-action="Index">
+                <select name="selectedStudentId" class="form-select w-50" onchange="this.form.submit()">
+                    <option value="">-- Выберите студента --</option>
+                    @foreach (var student in students)
+                    {
+                        var isSelected = selectedStudent?.StudentId == student.StudentId ? "selected" : "";
+                        <option value="@student.StudentId" selected="@isSelected">
+                            @student.FirstName @student.LastName
+                        </option>
+                    }
+                </select>
+            </form>
+
+            @if (selectedStudent != null)
+            {
+                <div class="mt-3 alert alert-info w-50">
+                    Посещений у выбранного студента: <strong>@selectedStudent.TotalAttendanceScore</strong>
+                </div>
+            }
+        } else
+            {
+                <p class="text-danger">Cтудент не выбран</p>
+            }
+
+</div>
+
+<hr style="margin: 3rem 0;"/>
+<div class="container">
+    <div class="row">
+        <h3>Просмотр пяти лучших и худших студентов</h3>
+        @if ((bool)ViewBag.BestTied || (bool)ViewBag.WorstTied)
+        {
+            <div class="alert alert-warning w-75">
+                Студентов с одинаковой лучшей или худшей оценкой более 5!
+            </div>
+        }
+
+        <table class="table table-bordered w-75">
+            <thead>
+                <tr>
+                    <th>Лучшие 5</th>
+                    <th>Худшие 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var best = ViewBag.Best as List<ITMOAspNetMvcApp.Models.Student>;
+                    var worst = ViewBag.Worst as List<ITMOAspNetMvcApp.Models.Student>;
+                    var maxCount = Math.Max(best?.Count ?? 0, worst?.Count ?? 0);
+
+                    for (int i = 0; i < maxCount; i++)
+                    {
+                        <tr>
+                            <td>
+                                @if (i < best.Count)
+                                {
+                                    <text>@best[i].FirstName @best[i].LastName (@best[i].TotalAttendanceScore)</text>
+                                }
+                            </td>
+                            <td>
+                                @if (i < worst.Count)
+                                {
+                                    <text>@worst[i].FirstName @worst[i].LastName (@worst[i].TotalAttendanceScore)</text>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr style="margin: 3rem 0;" />
+<h3>Вывод списка студентов в текстовый файл</h3>
+<p>Для вывода студентов с результатами в текстовый файл нажмите на кнопку:</p>
+
+<div class="mb-4">
+    <a class="btn btn-primary me-2" asp-controller="Students" asp-action="ExportToCsv">
+        Скачать .csv
+    </a>
+    <a class="btn btn-success" asp-controller="Students" asp-action="ExportToXls">
+        Скачать .xls
+    </a>
+</div>
+
+
+<hr style="margin: 3rem 0;"/>
+<h3 class="mt-4">Табель посещения</h3>
+
+<div class="tableFixHead">
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -40,16 +136,16 @@
                 <th>Фамилия</th>
                 <th>Всего занятий</th>
                 <th>Оценка по экзамену</th>
-                <th>17.03.2025</th>
-                <th>18.03.2025</th>
-                <th>20.03.2025</th>
-                <th>24.03.2025</th>
-                <th>25.03.2025</th>
-                <th>28.03.2025</th>
-                <th>31.03.2025</th>
-                <th>01.04.2025</th>
-                <th>03.04.2025</th>
-                <th>07.04.2025</th>
+                <th>17.03.25</th>
+                <th>18.03.25</th>
+                <th>20.03.25</th>
+                <th>24.03.25</th>
+                <th>25.03.25</th>
+                <th>28.03.25</th>
+                <th>31.03.25</th>
+                <th>01.04.25</th>
+                <th>03.04.25</th>
+                <th>07.04.25</th>
             </tr>
         </thead>
         <tbody>
