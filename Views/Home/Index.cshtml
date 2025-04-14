@@ -1,9 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Экзаминационная работа ASP.Net MVC App";
+    ViewData["Title"] = "ASP.Net MVC App";
 }
 
 <div class="text-left">
     <h1 class="display-4">@ViewData["Title"]</h1>
+    <h2>Экзаминационная работа</h2>
     <p>Добро пожаловать в web-приложение учёта студентов и табель посещения занятий.<br>Ниже приведён список доступных для изменения разделов:</p>
 </div>
 <div>
@@ -19,9 +20,6 @@
     </li>
     <li class="list-group-item">
         <a asp-controller="Lessons" asp-action="Index">Занятия</a>
-    </li>
-    <li class="list-group-item">
-        <a asp-controller="Disciplines" asp-action="Index">Дисциплины</a>
     </li>
 </ul>
 </div>

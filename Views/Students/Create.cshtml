@@ -1,4 +1,5 @@
 @model ITMOAspNetMvcApp.Models.Student
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 @{
     ViewData["Title"] = "Создать студента";
@@ -27,10 +28,20 @@
         <input asp-for="TotalAttendanceScore" class="form-control" />
         <span asp-validation-for="TotalAttendanceScore" class="text-danger"></span>
     </div>
+        <div class="form-group"></div>
+        <label asp-for="ExamScore"></label>
+        <input asp-for="ExamScore" class="form-control" />
+        <span asp-validation-for="ExamScore" class="text-danger"></span>
+    </div>
     <button type="submit" class="btn btn-primary">Создать</button>
     <a asp-action="Index" class="btn btn-secondary">Отмена</a>
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+@Html.ValidationMessageFor(model => model.TotalAttendanceScore, "", new { @class = "text-danger" })
+@Html.ValidationMessageFor(model => model.ExamScore, "", new { @class = "text-danger" })

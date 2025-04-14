@@ -70,31 +70,31 @@ namespace ITMOAspNetMvcApp.Controllers
         }
         
         // POST: Students/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,FirstName,LastName,Email,TotalAttendanceScore,ExamScore")] Student student)
-        {
-            if (id != student.StudentId)
-                return NotFound();
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Edit(int id, [Bind("StudentId,FirstName,LastName,Email,TotalAttendanceScore,ExamScore")] Student student)
+        // {
+        //     if (id != student.StudentId)
+        //         return NotFound();
                 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(student);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Students.Any(e => e.StudentId == student.StudentId))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(student);
-        }
+        //     if (ModelState.IsValid)
+        //     {
+        //         try
+        //         {
+        //             _context.Update(student);
+        //             await _context.SaveChangesAsync();
+        //         }
+        //         catch (DbUpdateConcurrencyException)
+        //         {
+        //             if (!_context.Students.Any(e => e.StudentId == student.StudentId))
+        //                 return NotFound();
+        //             else
+        //                 throw;
+        //         }
+        //         return RedirectToAction(nameof(Index));
+        //     }
+        //     return View(student);
+        // }
         
         // GET: Students/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -109,7 +109,52 @@ namespace ITMOAspNetMvcApp.Controllers
                 
             return View(student);
         }
-        
+
+                    [HttpPost]
+                    [ValidateAntiForgeryToken]
+                    public async Task<IActionResult> Edit(int id, [Bind("StudentId,FirstName,LastName,Email,TotalAttendanceScore,ExamScore")] Student student)
+                    {
+                        if (id != student.StudentId)
+                        {
+                            return NotFound();
+                        }
+                        
+                        // Добавляем логирование нового значения FirstName
+                        System.Diagnostics.Debug.WriteLine($"Изменённое значение FirstName: {student.FirstName}");
+
+                        if (!ModelState.IsValid)
+                        {
+                            // Выведем ошибки в отладочную консоль
+                            foreach (var key in ModelState.Keys)
+                            {
+                                foreach (var error in ModelState[key].Errors)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"Ошибка для {key}: {error.ErrorMessage}");
+                                }
+                            }
+                            // Если ModelState не валиден, метод вернёт ту же страницу с ошибками.
+                            return View(student);
+                        }
+                        
+                        try
+                        {
+                            _context.Update(student);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!_context.Students.Any(e => e.StudentId == student.StudentId))
+                                return NotFound();
+                            else
+                                throw;
+                        }
+                        
+                        return RedirectToAction(nameof(Index));
+                    }
+
+
+
+
         // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
