@@ -12,6 +12,6 @@ namespace ITMOAspNetMvcApp.Models
         public int ExamScore { get; set; }
         
         // Навигационное свойство для посещаемости
-        public ICollection<Attendance> Attendances { get; set; }
+        public ICollection<Attendance>? Attendances { get; set; }
     }
 }

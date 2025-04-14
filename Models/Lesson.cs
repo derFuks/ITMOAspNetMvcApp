@@ -10,6 +10,6 @@ namespace ITMOAspNetMvcApp.Models
         public DateTime LessonDate { get; set; }
         
         public Discipline Discipline { get; set; }
-        public ICollection<Attendance> Attendances { get; set; }
+        public ICollection<Attendance>? Attendances { get; set; }
     }
 }
